@@ -48,7 +48,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      # Build, tag, and push Fastapi image to Amazon ECR
+      - name: Build, tag, and push FastAPI image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -61,8 +62,19 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          
-          
+
+      # Build, tag, and push Streamlit image to Amazon ECR
+      - name: Build, tag, and push Streamlit image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY_STREAMLIT: ${{ secrets.ECR_REPOSITORY_NAME_STREAMLIT }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_STREAMLIT:$IMAGE_TAG -f Dockerfile.streamlit .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_STREAMLIT:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY_STREAMLIT:$IMAGE_TAG"
+        
+                 
   Continuous-Deployment:
     needs: build-and-push-ecr-image
     runs-on: self-hosted
@@ -86,13 +98,28 @@ jobs:
         run: |
          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
-      # - name: Stop and remove container if running
-      #   run: |
-      #    docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
+      #Remove
+      - name: Stop and remove container if running
+        run: |
+         docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
        
       - name: Run Docker Image to serve users
         run: |
          docker run -d -p 8080:8080 --name=texts -e 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' -e 'AWS_REGION=${{ secrets.AWS_REGION }}'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
+      # Pull and run Streamlit application
+      - name: Pull latest Streamlit image
+        run: |
+          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME_STREAMLIT }}:latest
+      
+      - name: Run Streamlit Docker Image
+        run: |
+          docker run -d -p 8501:8501 --name=streamlit-app \
+          -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+          -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+          -e AWS_REGION=${{ secrets.AWS_REGION }} \
+          ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME_STREAMLIT }}:latest
+
       - name: Clean previous images and containers
         run: |
          docker system prune -f
