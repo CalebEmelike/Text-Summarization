@@ -1,7 +1,8 @@
 # Configuration Manager class
 from textSummarizer.constants import *
 from textSummarizer.utils.common import read_yaml, create_directories
-from textSummarizer.entity import (DataIngestionConfig)
+from textSummarizer.entity import (DataIngestionConfig, 
+                                  ModelTrainerConfig)
 
 class ConfigurationManager:
     def __init__(self, 
@@ -26,4 +27,39 @@ class ConfigurationManager:
         )
         
         return data_ingestion_config
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+        params = self.params.TrainingParams
+        
+        create_directories([config.root_dir])
+        
+        model_trainer_config = ModelTrainerConfig(
+            root_dir = config.root_dir,
+            data_path = config.data_path,
+            output_dir = config.output_dir,
+            model_type = params.model_type,
+            model_name = params.model_name,
+            n_epochs = params.n_epochs,
+            train_batch_size = params.train_batch_size,
+            eval_batch_size = params.eval_batch_size,
+            lr = params.lr,
+            class_weights = params.class_weights,
+            reprocess_input_data = params.reprocess_input_data,
+            overwrite_output_dir = params.overwrite_output_dir,
+            fp16 = params.fp16,
+            do_lower_case = params.do_lower_case,
+            manual_seed = params.manual_seed,
+            use_multiprocessing = params.use_multiprocessing,
+            use_multiprocessing_for_evaluation = params.use_multiprocessing_for_evaluation,
+            thread_count = params.thread_count,
+            save_eval_checkpoints = params.save_eval_checkpoints,
+            save_model_every_epoch = params.save_model_every_epoch,
+            early_stopping_metric = params.early_stopping_metric,
+            early_stopping_metric_minimize = params.early_stopping_metric_minimize,
+            early_stopping_patience = params.early_stopping_patience,
+            use_cuda = params.use_cuda
+        )
+        
+        return model_trainer_config
         

@@ -1,1 +1,23 @@
-key: value
+TrainingParams:
+  model_type: "roberta"
+  model_name: "roberta-base"
+  n_epochs: 1
+  train_batch_size: 16
+  eval_batch_size: 16
+  lr: 3e-5
+  class_weights: None
+  reprocess_input_data: True
+  overwrite_output_dir: True
+  fp16: False
+  use_cuda: False
+  do_lower_case: False
+  manual_seed: 2
+  use_multiprocessing: False
+  use_multiprocessing_for_evaluation: False
+  thread_count: 1
+  save_eval_checkpoints: False
+  save_model_every_epoch: False
+  early_stopping_patience: 2
+  early_stopping_metric: "eval_loss"
+  early_stopping_metric_minimize: True
+  
