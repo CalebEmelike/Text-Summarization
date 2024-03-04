@@ -35,3 +35,9 @@ class ModelTrainerConfig:
     early_stopping_metric_minimize: bool
     early_stopping_patience: int
     use_cuda: bool
+    
+@dataclass(frozen=True)
+class PredictConfig:
+    root_dir: Path
+    data_path: Path
+    model_dir: Path

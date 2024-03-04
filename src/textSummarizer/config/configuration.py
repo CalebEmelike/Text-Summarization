@@ -2,7 +2,7 @@
 from textSummarizer.constants import *
 from textSummarizer.utils.common import read_yaml, create_directories
 from textSummarizer.entity import (DataIngestionConfig, 
-                                  ModelTrainerConfig)
+                                  ModelTrainerConfig, PredictConfig)
 
 class ConfigurationManager:
     def __init__(self, 
@@ -62,4 +62,14 @@ class ConfigurationManager:
         )
         
         return model_trainer_config
+    
+    def get_predict_config(self) -> PredictConfig:
+        config = self.config.model_predict
+        prediction_config = PredictConfig(
+            root_dir = config.root_dir,
+            data_path = config.data_path,
+            model_dir = config.model_dir
+        )
+        
+        return prediction_config
         

@@ -12,3 +12,7 @@ model_trainer:
   data_path: artifacts/data_ingestion/nlp_processed_train.csv
   output_dir: artifacts/model_trainer/model
 
+model_predict:
+  root_dir: artifacts/model_trainer
+  data_path: artifacts/data_ingestion/nlp_processed_train.csv
+  model_dir: artifacts/model_trainer/model/outputs
