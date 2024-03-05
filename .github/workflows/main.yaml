@@ -102,6 +102,10 @@ jobs:
       - name: Stop and remove container if running
         run: |
          docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
+
+      - name: Stop and remove streamlit container if running
+        run: |
+         docker ps -q --filter "name=streamlit-app" | grep -q . && docker stop streamlit-app && docker rm -fv streamlit-app
        
       - name: Run Docker Image to serve users
         run: |

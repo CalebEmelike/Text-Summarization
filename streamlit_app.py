@@ -13,5 +13,5 @@ if st.button("Classify"):
     result = requests.get(f"http://13.49.72.14:8080/predict?text={text}")
     st.write(result.text)
 
-if st.button("Train Model"):
-    result = requests.get(f"http://13.49.72.14:8080/train")
+# if st.button("Train Model"):
+#     result = requests.get(f"http://13.49.72.14:8080/train")
