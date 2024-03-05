@@ -92,23 +92,19 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      
-      - name: Clean previous images and containers
-        run: |
-         docker system prune -f
-         
+
       - name: Pull latest images
         run: |
          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
       #Remove
-      - name: Stop and remove container if running
-        run: |
-         docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
+      # - name: Stop and remove container if running
+      #   run: |
+      #    docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
 
-      - name: Stop and remove streamlit container if running
-        run: |
-         docker ps -q --filter "name=streamlit-app" | grep -q . && docker stop streamlit-app && docker rm -fv streamlit-app
+      # - name: Stop and remove streamlit container if running
+      #   run: |
+      #    docker ps -q --filter "name=streamlit-app" | grep -q . && docker stop streamlit-app && docker rm -fv streamlit-app
        
       - name: Run Docker Image to serve users
         run: |
