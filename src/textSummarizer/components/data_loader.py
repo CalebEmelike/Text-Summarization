@@ -18,14 +18,14 @@ class DataLoaders:
         tmp['labels'] = tmp['labels'].map({'NOT': 0, 'TIN': 1, 'UNT': 2})
         # Sample sizes for each class
         # Filter by category and sample
-        not_samples = tmp[tmp['labels'] == 0].sample(n=200, random_state=100)  # 'NOT' class
-        tin_samples = tmp[tmp['labels'] == 1].sample(n=200, random_state=100)  # 'TIN' class
-        unt_samples = tmp[tmp['labels'] == 2].sample(n=100, random_state=100)  
+        # not_samples = tmp[tmp['labels'] == 0].sample(n=200, random_state=100)  # 'NOT' class
+        # tin_samples = tmp[tmp['labels'] == 1].sample(n=200, random_state=100)  # 'TIN' class
+        # unt_samples = tmp[tmp['labels'] == 2].sample(n=100, random_state=100)  
   
         # Concatenate the samples
-        balanced_sample = pd.concat([not_samples, tin_samples, unt_samples]).reset_index(drop=True)
+        # balanced_sample = pd.concat([not_samples, tin_samples, unt_samples]).reset_index(drop=True)
 
-        return balanced_sample
+        return tmp
     
     def load_and_preprocess_data(self):
         data = self.load_data()
