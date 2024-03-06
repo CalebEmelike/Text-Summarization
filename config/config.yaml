@@ -3,7 +3,7 @@ artifacts_root: artifacts
 
 data_ingestion:
   root_dir: artifacts/data_ingestion
-  source_URL: https://github.com/CalebEmelike/OffensiveLanguage/raw/main/nlp_processed_train.zip
+  source_URL: https://github.com/CalebEmelike/OffensiveLanguage/raw/main/nlp_final_train.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir: artifacts/data_ingestion
 

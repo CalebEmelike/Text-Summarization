@@ -1,7 +1,7 @@
 TrainingParams:
   model_type: "roberta"
   model_name: "roberta-base"
-  n_epochs: 2
+  n_epochs: 3
   train_batch_size: 16
   eval_batch_size: 16
   lr: 3e-5

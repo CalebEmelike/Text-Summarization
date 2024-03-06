@@ -2,6 +2,7 @@ from simpletransformers.classification import ClassificationModel
 import torch
 from src.textSummarizer.components.data_loader import DataLoaders
 from textSummarizer.entity import ModelTrainerConfig
+from sklearn.utils.class_weight import compute_class_weight
 
 class ModelTrainer:
     def __init__(self, config: ModelTrainerConfig, data_loader: DataLoaders):
@@ -11,12 +12,14 @@ class ModelTrainer:
         
     def train_model(self):
         train_df = self.data_loader.load_and_preprocess_data()
+        class_weights = compute_class_weight('balanced', classes=train_df['labels'].unique(), y=train_df['labels'])
+        class_weights_dict = {i: weight for i, weight in enumerate(class_weights)}
         device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = ClassificationModel(
             self.config.model_type,
             self.config.model_name,
             num_labels=3,
-            use_cuda = False,
+            use_cuda = True if device == "cuda" else False,
             args={
                 'output_dir': f"{self.config.output_dir}/outputs",
                 'cache_dir': f"{self.config.output_dir}/cache",
@@ -24,6 +27,7 @@ class ModelTrainer:
                 'reprocess_input_data': self.config.reprocess_input_data,
                 'overwrite_output_dir': self.config.overwrite_output_dir,
                 'fp16': self.config.fp16,
+                'weight': class_weights_dict,
                 'do_lower_case': self.config.do_lower_case,
                 'manual_seed': self.config.manual_seed,
                 'use_multiprocessing': self.config.use_multiprocessing,
