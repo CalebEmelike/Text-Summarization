@@ -10,7 +10,7 @@ st.write("This is a simple text classification app")
 text = st.text_area("Enter the text to classify", "Type Here")
 
 if st.button("Classify"):
-    result = requests.get(f"https://16.16.28.221:8080/predict?text={text}")
+    result = requests.get(f"https://51.21.119.19:8080/predict?text={text}")
     st.write(result.text)
 
 # if st.button("Train Model"):
