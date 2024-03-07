@@ -20,7 +20,7 @@ class ModelTrainerConfig:
     train_batch_size: int
     eval_batch_size: int
     lr: float
-    class_weights: None
+    # class_weights: None
     reprocess_input_data: bool
     overwrite_output_dir: bool
     fp16: bool

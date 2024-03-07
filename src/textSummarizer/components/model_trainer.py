@@ -19,7 +19,7 @@ class ModelTrainer:
             self.config.model_type,
             self.config.model_name,
             num_labels=3,
-            use_cuda = True if device == "cuda" else False,
+            use_cuda = False,
             args={
                 'output_dir': f"{self.config.output_dir}/outputs",
                 'cache_dir': f"{self.config.output_dir}/cache",

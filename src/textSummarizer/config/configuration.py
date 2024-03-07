@@ -44,7 +44,7 @@ class ConfigurationManager:
             train_batch_size = params.train_batch_size,
             eval_batch_size = params.eval_batch_size,
             lr = params.lr,
-            class_weights = params.class_weights,
+            # class_weights = params.class_weights,
             reprocess_input_data = params.reprocess_input_data,
             overwrite_output_dir = params.overwrite_output_dir,
             fp16 = params.fp16,
